@@ -14,7 +14,7 @@ const colors = {
     green: [32, 42],
 };
 
-export function info(...args) {
+exports.info = (...args) => {
     console.log(
         colors.bg(colors.blue) +
             colors.fg(colors.black) +
@@ -23,9 +23,9 @@ export function info(...args) {
             colors.fg(colors.white),
         ...args
     );
-}
+};
 
-export function warn(...args) {
+exports.warn = (...args) => {
     console.log(
         colors.bg(colors.yellow) +
             colors.fg(colors.black) +
@@ -34,9 +34,9 @@ export function warn(...args) {
             colors.fg(colors.white),
         ...args
     );
-}
+};
 
-export function error(...args) {
+exports.error = (...args) => {
     console.log(
         colors.bg(colors.red) +
             colors.fg(colors.black) +
@@ -45,9 +45,9 @@ export function error(...args) {
             colors.fg(colors.white),
         ...args
     );
-}
+};
 
-export function success(...args) {
+exports.success = (...args) => {
     console.log(
         colors.bg(colors.green) +
             colors.fg(colors.black) +
@@ -56,4 +56,4 @@ export function success(...args) {
             colors.fg(colors.white),
         ...args
     );
-}
+};
