@@ -1,4 +1,5 @@
 const package = require("../package.json");
+const { rm } = require("fs/promises");
 const logger = require("./lib/logger.js");
 const args = require("./lib/args.js");
 const storage = require("./lib/storage.js");
@@ -24,9 +25,7 @@ async function main() {
     logger.success("Remote:", remoteVersion);
 
     if (remoteVersion <= localVersion) {
-        logger.info(
-            "Local is higher or equal to remote; there is nothing to do."
-        );
+        logger.info("Local is higher or equal to remote; there is nothing to do.");
         return process.exit(0);
     }
 
@@ -37,7 +36,7 @@ async function main() {
 
     let additions = [];
     for (let i = 0; i < remoteMods.length; i++) {
-        let remoteMod = remoteMods[i];
+        const remoteMod = remoteMods[i];
         let found = false;
 
         for (let ii = 0; ii < localMods.length; ii++) {
@@ -50,7 +49,7 @@ async function main() {
 
     let removals = [];
     for (let i = 0; i < localMods.length; i++) {
-        let localMod = localMods[i];
+        const localMod = localMods[i];
         let found = false;
 
         for (let ii = 0; ii < remoteMods.length; ii++) {
@@ -61,8 +60,37 @@ async function main() {
         if (!found) removals.push(localMod);
     }
 
-    console.log("Additions", additions);
-    console.log("Removals", removals);
+    logger.success("Additions:", additions.length);
+    logger.success("Removals:", removals.length);
+
+    for (let i = 0; i < additions.length; i++) {
+        const { name, modId, fileId } = additions[i];
+
+        const response = await server.getMod(config.host, modId, fileId);
+        const filename = response.url.split("/")[response.url.split("/").length - 1];
+
+        Bun.write(filename, await response.blob());
+
+        let data = storage.read();
+        data.mods.push({ name, path: filename });
+        storage.write(data);
+
+        logger.success("Downloaded:", name);
+    }
+
+    for (let i = 0; i < removals.length; i++) {
+        const { name, path } = removals[i];
+
+        await rm(path);
+
+        let data = storage.read();
+        data.mods = data.mods.filter((_) => _.name !== name);
+        storage.write(data);
+
+        logger.success("Removed:", name);
+    }
+
+    logger.success("Done!");
 }
 
 main();
