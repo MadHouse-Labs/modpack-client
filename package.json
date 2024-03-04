@@ -1,6 +1,6 @@
 {
     "name": "modpack-client",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "src/index.js",
     "scripts": {
         "build:linux": "yarn nexe -i src/index.js -o build/modpack-client -t linux-x64-20.11.1 --remote https://files.madhouselabs.net/nexe",

@@ -67,9 +67,9 @@ async function main() {
         const { name, modId, fileId } = additions[i];
 
         const response = await server.getMod(config.host, modId, fileId);
-        const filename = response.url.split("/")[response.url.split("/").length - 1];
+        const filename = "mods/" + response.url.split("/")[response.url.split("/").length - 1];
 
-        await writeFile("mods/" + filename, await response.blob());
+        await writeFile(filename, Buffer.from(await response.arrayBuffer()));
 
         let data = storage.read();
         data.mods.push({ name, path: filename });
@@ -89,6 +89,10 @@ async function main() {
 
         logger.success("Removed:", name);
     }
+
+    let data = storage.read();
+    data.version = remoteVersion;
+    storage.write(data);
 
     logger.success("Done!");
 }
