@@ -1,5 +1,5 @@
 const package = require("../package.json");
-const { rm } = require("fs/promises");
+const { rm, writeFile } = require("fs/promises");
 const logger = require("./lib/logger.js");
 const args = require("./lib/args.js");
 const storage = require("./lib/storage.js");
@@ -69,7 +69,7 @@ async function main() {
         const response = await server.getMod(config.host, modId, fileId);
         const filename = response.url.split("/")[response.url.split("/").length - 1];
 
-        Bun.write(filename, await response.blob());
+        await writeFile("mods/" + filename, await response.blob());
 
         let data = storage.read();
         data.mods.push({ name, path: filename });

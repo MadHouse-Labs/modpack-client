@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "main": "src/index.js",
     "scripts": {
-        "build:linux": "yarn nexe -i src/index.js -o build/modpack-client -t linux-x64-20.11.1 --remote https://oldcdn.madhouselabs.net/nexe",
-        "build:win": "yarn nexe -i src/index.js -o build/modpack-client.exe -t windows-x64-14.5.0"
+        "build:linux": "yarn nexe -i src/index.js -o build/modpack-client -t linux-x64-20.11.1 --remote https://files.madhouselabs.net/nexe",
+        "build:win": "yarn nexe -i src/index.js -o build/modpack-client.exe -t windows-x64-20.11.1 --remote https://files.madhouselabs.net/nexe"
     },
     "dependencies": {},
     "devDependencies": {
